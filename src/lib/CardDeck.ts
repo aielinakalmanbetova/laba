@@ -1,11 +1,11 @@
 import Card from './Card';
 
-export default class CardDeck {
+class CardDeck {
     public cards: Card[];
 
     constructor() {
         this.cards = [];
-        const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+        const suits = ['diams', 'hearts' , 'clubs', 'spades'];
         const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
         for (let suit of suits) {
@@ -27,4 +27,6 @@ export default class CardDeck {
         }
         return cards;
     }
-};
+}
+
+export default CardDeck;

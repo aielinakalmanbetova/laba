@@ -1,35 +1,51 @@
 import './App.css'
-import Card from "./components/Card/Card";
+import React, {useState} from 'react';
 import CardDeck from './lib/CardDeck';
-import React, { useState } from 'react';
+import MyCard from './components/Card/MyCard';
+import Card from './lib/Card';
+import PokerHand from './lib/PokerHand';
+
 
 const App: React.FC = () => {
-    const [cards, setCards] = useState<Card[]>([]);
+    const [dealtCards, setDealtCards] = useState<Card[]>([]);
+    const [deck, setDeck] = useState<CardDeck>(new CardDeck());
 
     const dealCards = () => {
-        const deck = new CardDeck();
-        const dealtCards = deck.getCards(5);
-        setCards(dealtCards);
+       if (deck.cards.length < 5) {
+           setDeck(new CardDeck());
+           setDealtCards([]);
+       } else {
+           const newDealtCards = deck.getCards(5);
+           setDealtCards(newDealtCards);
+       }
     };
 
+    const determineOutcome = () => {
+      const hand = new PokerHand(dealtCards);
+        return hand.getOutcome();
+    }
+
+    const outcome = determineOutcome();
 
     return (
         <>
             <div className='playingCards faceImages'>
+                <p>Количество карт: {deck.cards.length}</p>
+                <p>Результат раунда: {outcome}</p>
                 <button onClick={dealCards}>Раздать карты</button>
-                {cards.length > 0 ? (
-                    <>
-                    <p>Карты есть</p>
-                        {cards.map((card, index) => (
-                            <Card key={index} rank={card.rank} suit={card.suit}/>
+                {dealtCards.length > 0 ?
+                    <div>
+                        <p>Карты есть</p>
+                        {dealtCards.map((card, index) => (
+                            <MyCard key={index} rank={card.rank} suit={card.suit}/>
                         ))}
-                    </>
-                ) : (
+                    </div>
+                 :
                     <p>Карты нет</p>
-                )}
+                }
             </div>
         </>
     );
 };
 
-export default App
+export default App;
